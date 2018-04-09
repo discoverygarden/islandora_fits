@@ -20,48 +20,48 @@
  *
  * @see hook_islandora_derivative()
  */
-function islandora_fits_create_techmd(AbstractObject $object, $force = FALSE, $hook = array()) {
-  $techmd_dsid = variable_get('islandora_fits_techmd_dsid', 'TECHMD');
+function islandora_fits_create_techmd(AbstractObject $object, $force = FALSE, $hook = []) {
+  $techmd_dsid = \Drupal::config('islandora_fits.settings')->get('islandora_fits_techmd_dsid');
   if ($force || !isset($object[$techmd_dsid])) {
     if (!isset($object[$hook['source_dsid']])) {
-      return array(
+      return [
         'success' => FALSE,
-        'messages' => array(
-          array(
+        'messages' => [
+          [
             'message' => t('No @source datastream present for object @pid - technical metadata extraction was skipped.'),
-            'message_sub' => array('@source' => $hook['source_dsid'], '@pid' => $object->id),
+            'message_sub' => ['@source' => $hook['source_dsid'], '@pid' => $object->id],
             'type' => 'watchdog',
             'severity' => WATCHDOG_ERROR,
-          ),
-        ),
-      );
+          ],
+        ],
+      ];
     }
     $mime_detect = new MimeDetect();
     $ext = $mime_detect->getExtension($object[$hook['source_dsid']]->mimeType);
     $file_name = str_replace(':', '-', $object->id);
-    $out_file = drupal_realpath("temporary://{$file_name}.{$hook['source_dsid']}.{$ext}");
+    $out_file = \Drupal::service("file_system")->realpath("temporary://{$file_name}.{$hook['source_dsid']}.{$ext}");
     $object[$hook['source_dsid']]->getContent($out_file);
 
     $fits_file = islandora_fits_create_fits($out_file);
     if ($fits_file === FALSE) {
-      $success = array(
+      $success = [
         'success' => FALSE,
-        'messages' => array(
-          array(
+        'messages' => [
+          [
             'message' => t('Failed to create technical metadata with FITS script.'),
             'type' => 'watchdog',
             'severity' => WATCHDOG_ERROR,
-          ),
-        ),
-      );
+          ],
+        ],
+      ];
     }
     else {
-      $success = islandora_fits_add_datastream($object, variable_get('islandora_fits_techmd_dsid', 'TECHMD'), $fits_file);
-      drupal_unlink($fits_file);
+      $success = islandora_fits_add_datastream($object, \Drupal::config('islandora_fits.settings')->get('islandora_fits_techmd_dsid'), $fits_file);
+      \Drupal::service("file_system")->unlink($fits_file);
     }
 
     // Add any more processors here - there probably won't be any.
-    drupal_unlink($out_file);
+    \Drupal::service("file_system")->unlink($out_file);
     return $success;
   }
 }
@@ -76,9 +76,9 @@ function islandora_fits_create_techmd(AbstractObject $object, $force = FALSE, $h
  *   A URI to the generated derivative if successful, FALSE otherwise.
  */
 function islandora_fits_create_fits($file) {
-  $output = array();
+  $output = [];
   $outfile = "{$file}.tech.xml";
-  $fits = variable_get('islandora_fits_executable_path', 'fits.sh');
+  $fits = \Drupal::config('islandora_fits.settings')->get('islandora_fits_executable_path');
   $command = "$fits -i $file -xc -o $outfile";
   exec($command, $output, $ret);
   if ($ret == '0') {
@@ -86,7 +86,7 @@ function islandora_fits_create_fits($file) {
       return $outfile;
     }
   }
-  $output = array();
+  $output = [];
   // It failed, lets try a simpler command (-x instead of -xc).
   $command = "$fits -i $file -x -o $outfile";
   exec($command, $output, $ret);
@@ -95,7 +95,7 @@ function islandora_fits_create_fits($file) {
       return $outfile;
     }
   }
-  $output = array();
+  $output = [];
   // In case of disaster, fall back to the simplest possibly command line.
   $command = "$fits -i $file -o $outfile";
   exec($command, $output, $ret);
@@ -126,7 +126,7 @@ function islandora_fits_verify_fits_xml($xml_file) {
   else {
     // Fits wont write to a file if it already exists.
     if (file_exists($xml_file)) {
-      drupal_unlink($xml_file);
+      \Drupal::service("file_system")->unlink($xml_file);
     }
     return FALSE;
   }
@@ -161,7 +161,7 @@ function islandora_fits_add_datastream($object, $datastream_id, $file_uri) {
     if ($ds->mimetype != $mime_detector->getMimetype($file_uri)) {
       $ds->mimetype = $mime_detector->getMimetype($file_uri);
     }
-    $ds->setContentFromFile(drupal_realpath($file_uri));
+    $ds->setContentFromFile(\Drupal::service("file_system")->realpath($file_uri));
     if ($ingest) {
       $object->ingestDatastream($ds);
     }
