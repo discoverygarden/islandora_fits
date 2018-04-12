@@ -3,24 +3,12 @@
 /**
  * @file
  * The main fits module file. Contains most of the hook implementations.
- *
- * @todo Add uninstall hook to delete our the variables we set.
  */
 
 /**
  * Implements hook_menu().
  */
 function islandora_fits_menu() {
-  $items = array();
-  $items['admin/islandora/tools/fits'] = array(
-    'title' => 'FITS Tool',
-    'description' => 'Configure the Islandora FITS extractor.',
-    'page callback' => 'drupal_get_form',
-    'access arguments' => array('administer site configuration'),
-    'page arguments' => array('islandora_fits_admin_form'),
-    'file' => 'includes/admin.form.inc',
-    'type' => MENU_NORMAL_ITEM,
-  );
   $items['islandora/object/%islandora_object/manage/fits_metadata'] = array(
     'title' => 'Technical Metadata',
     'type' => MENU_LOCAL_TASK,
@@ -29,7 +17,6 @@ function islandora_fits_menu() {
     'access callback' => 'islandora_fits_metadata_access',
     'access arguments' => array(2),
   );
-  return $items;
 }
 
 /**

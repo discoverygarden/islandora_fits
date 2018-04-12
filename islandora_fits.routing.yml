@@ -1,0 +1,7 @@
+islandora_fits.admin:
+  path: '/admin/config/islandora/tools/fits'
+  defaults:
+    _title: 'FITS Tool'
+    _form: '\Drupal\islandora_fits\Form\Admin'
+  requirements:
+    _permission: 'administer site configuration'

@@ -19,6 +19,7 @@ class Admin extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
+    $form_state->loadInclude('islandora_fits', 'inc', 'includes/admin.form');
     if (!$form_state->getTriggeringElement()) {
       // Textfield AJAX callback.
       if ($form_state->getTriggeringElement() == 'islandora_fits_path_textfield') {
@@ -82,7 +83,6 @@ class Admin extends FormBase {
       '#type' => 'submit',
       '#value' => t('Save Configuration'),
     ];
-    $form['#submit'][] = 'islandora_fits_admin_submit_form';
 
     return $form;
   }
@@ -98,6 +98,19 @@ class Admin extends FormBase {
         $form_state->setErrorByName('islandora_fits_executable_path', "FITS path is not valid. Provide a valid path or disable FITS derivatives.");
       }
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function submitForm(array &$form, FormStateInterface $form_state) {
+    $config = $this->config('islandora_fits.settings');
+
+    $config->set('islandora_fits_executable_path', $form_state->getValue('islandora_fits_executable_path'));
+    $config->set('islandora_fits_techmd_dsid', $form_state->getValue('islandora_fits_techmd_dsid'));
+    $config->set('islandora_fits_do_derivatives', $form_state->getValue('islandora_fits_do_derivatives'));
+
+    $config->save();
   }
 
 }

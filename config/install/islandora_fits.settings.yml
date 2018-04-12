@@ -1,0 +1,3 @@
+islandora_fits_techmd_dsid: TECHMD
+islandora_fits_executable_path: fits.sh
+islandora_fits_do_derivatives: true
