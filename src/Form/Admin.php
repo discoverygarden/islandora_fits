@@ -4,8 +4,10 @@ namespace Drupal\islandora_fits\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Element;
 
+/**
+ * Module administration form.
+ */
 class Admin extends FormBase {
 
   /**
@@ -32,7 +34,7 @@ class Admin extends FormBase {
     $conf_message = islandora_fits_get_path_message($fits_path);
     $form['islandora_fits_do_derivatives'] = [
       '#type' => 'checkbox',
-      '#title' => t('Run Islandora FITS derivatives locally'),
+      '#title' => $this->t('Run Islandora FITS derivatives locally'),
       '#name' => 'islandora_fits_do_derivatives',
       '#description' => $this->t('If checked (default), this server will use FITS to create a technical metadata datastream (the datastream id of which is defined below). Requires a local installation of the FITS tool.'),
       '#return_value' => 1,
@@ -55,10 +57,10 @@ class Admin extends FormBase {
       '#states' => [
         'visible' => [
           ':input[name="islandora_fits_do_derivatives"]' => [
-            'checked' => TRUE
-            ]
-          ]
+            'checked' => TRUE,
+          ],
         ],
+      ],
     ];
     $form['islandora_fits_wrapper']['islandora_fits_path_check'] = [
       '#type' => 'item',
@@ -66,10 +68,10 @@ class Admin extends FormBase {
       '#states' => [
         'visible' => [
           ':input[name="islandora_fits_do_derivatives"]' => [
-            'checked' => TRUE
-            ]
-          ]
+            'checked' => TRUE,
+          ],
         ],
+      ],
     ];
     // Add form options for what the datastream is called.
     $form['islandora_fits_techmd_dsid'] = [
@@ -78,10 +80,9 @@ class Admin extends FormBase {
       '#description' => $this->t("The DSID to use when creating or displaying an object's technical metadata."),
       '#default_value' => $this->config('islandora_fits.settings')->get('islandora_fits_techmd_dsid'),
     ];
-    // Add options to include/exclude certain mimetypes/extensions/solution packs.
     $form['buttons']['submit'] = [
       '#type' => 'submit',
-      '#value' => t('Save Configuration'),
+      '#value' => $this->t('Save Configuration'),
     ];
 
     return $form;

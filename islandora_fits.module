@@ -82,42 +82,42 @@ function template_preprocess_islandora_fits_metadata_display(array &$variables) 
   $xml = new SimpleXMLElement($techmd_ds);
   $xml->registerXPathNamespace('fits', 'http://hul.harvard.edu/ois/xml/ns/fits/fits_output');
   $fits_metadata = islandora_fits_child_xpath($xml);
-  $headers = array(
+  $headers = [
     'label' => t('Field'),
     'value' => t('Value'),
-  );
+  ];
   if (count($fits_metadata) == 0) {
     $variables['islandora_fits_table']['empty'] = '';
-    $variables['islandora_fits_fieldsets']['empty'] = array(
+    $variables['islandora_fits_fieldsets']['empty'] = [
       '#type' => 'markup',
       '#markup' => t('No technical metadata found.'),
-    );
+    ];
   }
   else {
     foreach ($fits_metadata as $tool_name => $vals_array) {
-      $variables['islandora_fits_data'][$tool_name] = array();
+      $variables['islandora_fits_data'][$tool_name] = [];
       $rows = & $variables['islandora_fits_data'][$tool_name];
       foreach ($vals_array as $field => $val_array) {
         if (!array_key_exists($field, $rows)) {
-          $rows[$field] = array(
-            array('data' => \Drupal\Component\Utility\Html::escape($field), 'class' => 'islandora_fits_table_labels'),
-          );
+          $rows[$field] = [
+            ['data' => \Drupal\Component\Utility\Html::escape($field), 'class' => 'islandora_fits_table_labels'],
+          ];
           foreach ($val_array as $value) {
             if (!isset($rows[$field]['value'])) {
-              $rows[$field]['value'] = array('data' => \Drupal\Component\Utility\Html::escape($value), 'class' => 'islandora_fits_table_values');
+              $rows[$field]['value'] = ['data' => \Drupal\Component\Utility\Html::escape($value), 'class' => 'islandora_fits_table_values'];
             }
             else {
-              $rows[$field]['value'] = array('data' => $rows[$field]['value']['data'] .= '<br />' . \Drupal\Component\Utility\Html::escape($value), 'class' => 'islandora_fits_table_values');
+              $rows[$field]['value'] = ['data' => $rows[$field]['value']['data'] .= '<br />' . \Drupal\Component\Utility\Html::escape($value), 'class' => 'islandora_fits_table_values'];
             }
           }
         }
-        $table_attributes = array('class' => array('islandora_fits_table'));
+        $table_attributes = ['class' => ['islandora_fits_table']];
 
-        $table = array(
+        $table = [
           'header' => $headers,
           'rows' => $rows,
           'attributes' => $table_attributes,
-        );
+        ];
         $variables['islandora_fits_table'][$tool_name] = $table;
         // @FIXME
 // theme() has been renamed to _theme() and should NEVER be called directly.
@@ -144,13 +144,13 @@ function template_preprocess_islandora_fits_metadata_display(array &$variables) 
 /**
  * Menu callback function.
  *
- * @param IslandoraObject $object
- *   The islandora object to display the metadata for.
+ * @param AbstractObject $object
+ *   The Islandora object to display the metadata for.
  *
  * @return string
  *   The marked up output for display in Drupal.
  */
-function islandora_fits_metadata_display($object) {
+function islandora_fits_metadata_display(AbstractObject $object) {
   module_load_include('inc', 'islandora', 'includes/breadcrumb');
   return [
     '#theme' => 'islandora_fits_metadata_display',
@@ -191,7 +191,7 @@ function islandora_fits_child_xpath($xml) {
  * @param array $output
  *   An array containing key/value pairs of fields and data.
  */
-function islandora_fits_children($child, &$output) {
+function islandora_fits_children(SimpleXMLElement $child, array &$output) {
   $grandchildren = $child->xpath('*/*');
 
   if (count($grandchildren) > 0) {

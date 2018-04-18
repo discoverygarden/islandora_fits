@@ -29,10 +29,7 @@ ignore is as follows:
 
 ```
 "Exception in thread "main" java.lang.NullPointerException
-    at edu.harvard.hul.ois.fits.FitsOutput.addStandardCombinedFormat(FitsOutput.java:310)
-    at edu.harvard.hul.ois.fits.Fits.outputStandardCombinedFormat(Fits.java:294)
-    at edu.harvard.hul.ois.fits.Fits.outputResults(Fits.java:275)
-    at edu.harvard.hul.ois.fits.Fits.main(Fits.java:186)
+...
 Error: output cannot be converted to a standard schema format for this file"
 ```
 
@@ -46,8 +43,10 @@ This module requires the following modules/libraries:
 * [Tuque](https://github.com/islandora/tuque)
 * [The File Information Tool Set](https://github.com/harvard-lts/fits)
 
-Clone the fits tool which can be found [here](https://github.com/harvard-lts/fits). Make sure it is in a location where the apache user can
-get access.  Navigate to the fits folder and make sure `fits.sh` has executable permissions so the apache user can run the script. 
+Clone the fits tool which can be found
+[here](https://github.com/harvard-lts/fits). Make sure it is in a location where
+the apache user can get access.  Navigate to the fits folder and make sure
+`fits.sh` has executable permissions so the apache user can run the script.
 
 
 ## Installation
@@ -58,7 +57,8 @@ Install as
 ## Configuration
 
 Set the path for `fits.sh` and create a name for the technical metadata stream
-ID in Configuration » Islandora » Islandora Utility Modules » FITS Tool (admin/config/islandora/tools/fits).
+ID in Configuration » Islandora » Islandora Utility Modules » FITS Tool
+(admin/config/islandora/tools/fits).
 
 ![image](https://cloud.githubusercontent.com/assets/2371345/9691525/4a2591f6-5319-11e5-9949-522100689641.png)
 
@@ -69,7 +69,8 @@ wiki](https://wiki.duraspace.org/display/ISLANDORA/Islandora+FITS).
 
 ## Troubleshooting/Issues
 
-A [known issue](https://jira.duraspace.org/browse/ISLANDORA-2057) with the FITS module can cause a memory leak as of version 7.x-1.10.
+A [known issue](https://jira.duraspace.org/browse/ISLANDORA-2057) with the FITS
+module can cause a memory leak as of version 7.x-1.10.
 
 Having problems or solved one? Create an issue, check out the Islandora Google
 groups.
@@ -83,12 +84,16 @@ or contact [discoverygarden](http://support.discoverygarden.ca).
 
 Q. Why didn't I get any technical metatadata?
 
-A. If you run an ingest and you don't get any technical metadata, check to make sure the permissions on the fits folder and the `fits.sh` script are correct and
+A. If you run an ingest and you don't get any technical metadata, check to make
+sure the permissions on the fits folder and the `fits.sh` script are correct and
 the apache user can run the script.
 
 Q. Why am I getting weird errors in the log?
 
-A. Some images and audio files will cause problems during metadata extraction. These are not fatal errors, but appear to be formats the fits script can't understand. In these cases, you will get some error reporting in the technical metadata datastream that may help determine what happened.
+A. Some images and audio files will cause problems during metadata extraction.
+These are not fatal errors, but appear to be formats the fits script can't
+understand. In these cases, you will get some error reporting in the technical
+metadata datastream that may help determine what happened.
 
 ## Maintainers/Sponsors
 

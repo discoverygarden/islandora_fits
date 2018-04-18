@@ -1,4 +1,6 @@
-<?php /**
+<?php
+
+/**
  * @file
  * Contains \Drupal\islandora_fits\Controller\DefaultController.
  */
@@ -13,10 +15,16 @@ use Drupal\Core\Session\AccountInterface;
  */
 class DefaultController extends ControllerBase {
 
+  /**
+   * Access callback for viewing technical metadata.
+   */
   public function islandora_fits_metadata_access($object, AccountInterface $account) {
     return islandora_datastream_access('view technical metadata', $object[\Drupal::config('islandora_fits.settings')->get('islandora_fits_techmd_dsid')]);
   }
 
+  /**
+   * Technical metadata display.
+   */
   public function islandora_fits_metadata_display($object) {
     module_load_include('inc', 'islandora', 'includes/breadcrumb');
     drupal_set_breadcrumb(islandora_get_breadcrumbs($object));

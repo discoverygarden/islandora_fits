@@ -20,7 +20,7 @@
  *
  * @see hook_islandora_derivative()
  */
-function islandora_fits_create_techmd(AbstractObject $object, $force = FALSE, $hook = []) {
+function islandora_fits_create_techmd(AbstractObject $object, $force = FALSE, array $hook = []) {
   $techmd_dsid = \Drupal::config('islandora_fits.settings')->get('islandora_fits_techmd_dsid');
   if ($force || !isset($object[$techmd_dsid])) {
     if (!isset($object[$hook['source_dsid']])) {
@@ -114,7 +114,7 @@ function islandora_fits_create_fits($file) {
  * WARNING: This function will delete said file if its file size is equal to 0.
  *
  * @param string $xml_file
- *   The path to the created xml file to validate
+ *   The path to the created xml file to validate.
  *
  * @return bool
  *   TRUE if the generated XML has size, FALSE otherwise.
@@ -147,7 +147,7 @@ function islandora_fits_verify_fits_xml($xml_file) {
  *
  * @see hook_islandora_derivative()
  */
-function islandora_fits_add_datastream($object, $datastream_id, $file_uri) {
+function islandora_fits_add_datastream(AbstractObject $object, $datastream_id, $file_uri) {
   try {
     $ingest = !isset($object[$datastream_id]);
     $mime_detector = new MimeDetect();
@@ -165,32 +165,32 @@ function islandora_fits_add_datastream($object, $datastream_id, $file_uri) {
     if ($ingest) {
       $object->ingestDatastream($ds);
     }
-    return array(
+    return [
       'success' => TRUE,
-      'messages' => array(
-        array(
+      'messages' => [
+        [
           'message' => t('Created TECHMD derivative for (@pid).'),
-          'message_sub' => array(
+          'message_sub' => [
             '@pid' => $object->id,
-          ),
+          ],
           'type' => 'dsm',
-        ),
-      ),
-    );
+        ],
+      ],
+    ];
   }
   catch (exception $e) {
-    return array(
+    return [
       'success' => FALSE,
-      'messages' => array(
-        array(
+      'messages' => [
+        [
           'message' => t('Failed to create TECHMD derivative for @pid.'),
-          'message_sub' => array(
+          'message_sub' => [
             '@pid' => $object->id,
-          ),
+          ],
           'type' => 'watchdog',
           'severity' => WATCHDOG_ERROR,
-        ),
-      ),
-    );
+        ],
+      ],
+    ];
   }
 }

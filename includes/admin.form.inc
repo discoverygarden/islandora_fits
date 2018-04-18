@@ -44,19 +44,19 @@ function islandora_fits_get_path_message($fits_path) {
  */
 function islandora_fits_path_check($path) {
   module_load_include('inc', 'islandora', 'includes/utilities');
-  $allowed_paths = array(
+  $allowed_paths = [
     'fits.sh',
     'fits',
-  );
-  $errors = array();
+  ];
+  $errors = [];
   if (!in_array($path, $allowed_paths)) {
     // Check whether the given file exists.
     if (!is_file($path)) {
-      $errors[] = t('The specified file path %file does not exist.', array('%file' => $path));
+      $errors[] = t('The specified file path %file does not exist.', ['%file' => $path]);
     }
     // If it exists, check if it's executable.
     elseif (!is_executable($path)) {
-      $errors[] = t('The specified file path %file is not executable.', array('%file' => $path));
+      $errors[] = t('The specified file path %file is not executable.', ['%file' => $path]);
     }
   }
   // Ensure that if this is a Windows server, $file isn't pointing to a
@@ -69,7 +69,7 @@ function islandora_fits_path_check($path) {
     $command = $path . ' -v';
     exec($command, $output, $return_value);
     if ($return_value !== 0) {
-      $errors[] = t('The command %file is not a valid FITS executable.', array('%file' => $path));
+      $errors[] = t('The command %file is not a valid FITS executable.', ['%file' => $path]);
     }
   }
   return $errors;
