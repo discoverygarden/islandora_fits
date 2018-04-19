@@ -18,18 +18,20 @@ function islandora_fits_path_ajax($form, $form_state) {
 function islandora_fits_get_path_message($fits_path) {
   $errors = islandora_fits_path_check($fits_path);
   if (empty($errors)) {
-    // @FIXME
-// url() expects a route name or an external URI.
-// $confirmation_message = '<img src="' . url('misc/watchdog-ok.png') . '"/> ' . t('Executable found at @fitspath', array('@fitspath' => $fits_path));
-
+    $image = [
+      '#theme' => 'image',
+      '#uri' => '/core/misc/icons/73b355/check.svg',
+    ];
+    $message = t('Executable found at @fitspath', ['@fitspath' => $fits_path]);
   }
   else {
-    // @FIXME
-// url() expects a route name or an external URI.
-// $confirmation_message = '<img src="' . url('misc/watchdog-error.png') . '"/> ' . implode('<br/>', $errors);
-
+    $image = [
+      '#theme' => 'image',
+      '#uri' => '/core/misc/icons/e32700/error.svg',
+    ];
+    $message = implode('<br/>', $errors);
   }
-  return $confirmation_message;
+  return Drupal::service('renderer')->render($image) . $message;
 }
 
 /**

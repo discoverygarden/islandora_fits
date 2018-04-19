@@ -22,7 +22,7 @@ class Admin extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form_state->loadInclude('islandora_fits', 'inc', 'includes/admin.form');
-    if (!$form_state->getTriggeringElement()) {
+    if ($form_state->getTriggeringElement()) {
       // Textfield AJAX callback.
       if ($form_state->getTriggeringElement() == 'islandora_fits_path_textfield') {
         $fits_path = $form_state->getUserInput();
