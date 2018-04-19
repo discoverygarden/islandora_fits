@@ -5,6 +5,10 @@
  * Miscellaneous helper functions for creating/ingesting FITS documents.
  */
 
+use Drupal\Core\Logger\RfcLogLevel;
+
+use Drupal\islandora\MimeDetect;
+
 /**
  * Creates all technical metadata derivatives as datastreams for given object.
  *
@@ -31,7 +35,7 @@ function islandora_fits_create_techmd(AbstractObject $object, $force = FALSE, ar
             'message' => t('No @source datastream present for object @pid - technical metadata extraction was skipped.'),
             'message_sub' => ['@source' => $hook['source_dsid'], '@pid' => $object->id],
             'type' => 'watchdog',
-            'severity' => WATCHDOG_ERROR,
+            'severity' => RfcLogLevel::ERROR,
           ],
         ],
       ];
@@ -50,7 +54,7 @@ function islandora_fits_create_techmd(AbstractObject $object, $force = FALSE, ar
           [
             'message' => t('Failed to create technical metadata with FITS script.'),
             'type' => 'watchdog',
-            'severity' => WATCHDOG_ERROR,
+            'severity' => RfcLogLevel::ERROR,
           ],
         ],
       ];
@@ -188,7 +192,7 @@ function islandora_fits_add_datastream(AbstractObject $object, $datastream_id, $
             '@pid' => $object->id,
           ],
           'type' => 'watchdog',
-          'severity' => WATCHDOG_ERROR,
+          'severity' => RfcLogLevel::ERROR,
         ],
       ],
     ];
