@@ -2,13 +2,13 @@
 
 namespace Drupal\islandora_fits\Form;
 
-use Drupal\Core\Form\FormBase;
+use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Module administration form.
  */
-class Admin extends FormBase {
+class Admin extends ConfigFormBase {
 
   /**
    * {@inheritdoc}
@@ -20,12 +20,19 @@ class Admin extends FormBase {
   /**
    * {@inheritdoc}
    */
+  protected function getEditableConfigNames() {
+    return ['islandora_fits.settings'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form_state->loadInclude('islandora_fits', 'inc', 'includes/admin.form');
     if ($form_state->getTriggeringElement()) {
       // Textfield AJAX callback.
-      if ($form_state->getTriggeringElement() == 'islandora_fits_path_textfield') {
-        $fits_path = $form_state->getUserInput();
+      if ($form_state->getTriggeringElement()['#name'] == 'islandora_fits_path_textfield') {
+        $fits_path = $form_state->getUserInput()['islandora_fits_path_textfield'];
       }
     }
     else {
@@ -53,6 +60,7 @@ class Admin extends FormBase {
       '#ajax' => [
         'callback' => 'islandora_fits_path_ajax',
         'wrapper' => 'islandora_fits_wrapper',
+        'disable-refocus' => TRUE,
       ],
       '#states' => [
         'visible' => [
