@@ -17,14 +17,6 @@
  */
 #}
 
-<?php // @FIXME
-// drupal_set_title() has been removed. There are now a few ways to set the title
-// dynamically, depending on the situation.
-//
-//
-// @see https://www.drupal.org/node/2067859
-// drupal_set_title(t('@label Technical Metadata', array('@label' => $variables['islandora_object']->label)));
- ?>
 {% for name, table in islandora_fits_table %}
   {{ islandora_fits_fieldsets[name] }}
 {% endfor %}

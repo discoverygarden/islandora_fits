@@ -1,0 +1,4 @@
+islandora_fits.fits_metadata:
+  route_name: islandora_fits.fits_metadata
+  title: Technical Metadata
+  parent_id: islandora.manage_overview_object

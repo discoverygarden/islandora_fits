@@ -5,19 +5,7 @@
  * The main fits module file. Contains most of the hook implementations.
  */
 
-/**
- * Implements hook_menu().
- */
-function islandora_fits_menu() {
-  $items['islandora/object/%islandora_object/manage/fits_metadata'] = array(
-    'title' => 'Technical Metadata',
-    'type' => MENU_LOCAL_TASK,
-    'page callback' => 'islandora_fits_metadata_display',
-    'page arguments' => array(2),
-    'access callback' => 'islandora_fits_metadata_access',
-    'access arguments' => array(2),
-  );
-}
+use Drupal\Component\Utility\Html;
 
 /**
  * Implements hook_theme().
@@ -70,7 +58,10 @@ function islandora_fits_ir_citationcmodel_islandora_derivative() {
  * Access callback for the FITS metadata display.
  */
 function islandora_fits_metadata_access($object) {
-  return islandora_datastream_access('view technical metadata', $object[\Drupal::config('islandora_fits.settings')->get('islandora_fits_techmd_dsid')]);
+  return islandora_datastream_access(
+    'view technical metadata',
+    $object[\Drupal::config('islandora_fits.settings')->get('islandora_fits_techmd_dsid')]
+  );
 }
 
 /**
@@ -100,14 +91,14 @@ function template_preprocess_islandora_fits_metadata_display(array &$variables) 
       foreach ($vals_array as $field => $val_array) {
         if (!array_key_exists($field, $rows)) {
           $rows[$field] = [
-            ['data' => \Drupal\Component\Utility\Html::escape($field), 'class' => 'islandora_fits_table_labels'],
+            ['data' => Html::escape($field), 'class' => 'islandora_fits_table_labels'],
           ];
           foreach ($val_array as $value) {
             if (!isset($rows[$field]['value'])) {
-              $rows[$field]['value'] = ['data' => \Drupal\Component\Utility\Html::escape($value), 'class' => 'islandora_fits_table_values'];
+              $rows[$field]['value'] = ['data' => Html::escape($value), 'class' => 'islandora_fits_table_values'];
             }
             else {
-              $rows[$field]['value'] = ['data' => $rows[$field]['value']['data'] .= '<br />' . \Drupal\Component\Utility\Html::escape($value), 'class' => 'islandora_fits_table_values'];
+              $rows[$field]['value'] = ['data' => $rows[$field]['value']['data'] .= '<br />' . Html::escape($value), 'class' => 'islandora_fits_table_values'];
             }
           }
         }
@@ -119,23 +110,17 @@ function template_preprocess_islandora_fits_metadata_display(array &$variables) 
           'attributes' => $table_attributes,
         ];
         $variables['islandora_fits_table'][$tool_name] = $table;
-        // @FIXME
-// theme() has been renamed to _theme() and should NEVER be called directly.
-// Calling _theme() directly can alter the expected output and potentially
-// introduce security issues (see https://www.drupal.org/node/2195739). You
-// should use renderable arrays instead.
-//
-//
-// @see https://www.drupal.org/node/2195739
-// $variables['islandora_fits_fieldsets'][$tool_name] = array(
-//           '#type' => 'fieldset',
-//           '#title' => $tool_name,
-//           '#collapsed' => TRUE,
-//           'table' => array(
-//             '#markup' => theme('table', $table),
-//           ),
-//         );
-
+        $variables['islandora_fits_fieldsets'][$tool_name] = [
+          '#type' => 'fieldset',
+          '#title' => $tool_name,
+          '#collapsed' => TRUE,
+          'table' => [
+            '#type' => 'table',
+            '#header' => $headers,
+            '#rows' => $rows,
+            '#attributes' => $table_attributes,
+          ],
+        ];
       }
     }
   }
@@ -155,6 +140,9 @@ function islandora_fits_metadata_display(AbstractObject $object) {
   return [
     '#theme' => 'islandora_fits_metadata_display',
     '#islandora_object' => $object,
+    '#attached' => [
+      'library' => ['islandora_fits/fits-css'],
+    ],
   ];
 }
 
@@ -169,7 +157,7 @@ function islandora_fits_metadata_display(AbstractObject $object) {
  * @return array
  *   An array containing key/value pairs of fields and data.
  */
-function islandora_fits_child_xpath($xml) {
+function islandora_fits_child_xpath(SimpleXMLElement $xml) {
   $results = $xml->xpath('/*|/*/fits:metadata');
   $output = [];
   foreach ($results as $result) {
@@ -187,7 +175,6 @@ function islandora_fits_child_xpath($xml) {
  *
  * @param SimpleXMLElement $child
  *   The current child that we are searching through.
- *
  * @param array $output
  *   An array containing key/value pairs of fields and data.
  */

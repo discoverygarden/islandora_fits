@@ -5,3 +5,14 @@ islandora_fits.admin:
     _form: '\Drupal\islandora_fits\Form\Admin'
   requirements:
     _permission: 'administer site configuration'
+islandora_fits.fits_metadata:
+  path: '/islandora/object/{object}/manage/fits_metadata'
+  defaults:
+    _title: 'Technical Metadata'
+    _controller: '\Drupal\islandora_fits\Controller\DefaultController::metadataDisplay'
+  options:
+    parameters:
+      object:
+        type: object
+  requirements:
+    _custom_access: '\Drupal\islandora_fits\Controller\DefaultController::metadataAccess'
