@@ -1,0 +1,5 @@
+islandora_fits.admin:
+  route_name: islandora_fits.admin
+  parent: islandora.tools_admin
+  title: 'FITS Tool'
+  description: 'Configure the Islandora FITS extractor.'

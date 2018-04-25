@@ -1,0 +1,4 @@
+fits-css:
+  css:
+    layout:
+      css/islandora_fits.css: {}

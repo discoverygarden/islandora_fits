@@ -1,0 +1,10 @@
+islandora_fits.settings:
+  type: mapping
+  label: Settings
+  mapping:
+    islandora_fits_executable_path:
+      type: string
+    islandora_fits_techmd_dsid:
+      type: string
+    islandora_fits_do_derivatives:
+      type: boolean

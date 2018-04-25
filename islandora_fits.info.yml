@@ -1,0 +1,9 @@
+name: 'Islandora FITS'
+description: 'View and manage FITS datastreams'
+dependencies:
+  - :islandora
+package: 'Islandora Tools'
+configure: islandora_fits.admin
+core: 8.x
+type: module
+php: '5.5.9'
