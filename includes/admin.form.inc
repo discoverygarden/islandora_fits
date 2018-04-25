@@ -5,6 +5,8 @@
  * Admin form helpers for the Islandora fits module.
  */
 
+use Drupal\Core\Url;
+
 /**
  * Ajax handler for admin form.
  */
@@ -20,14 +22,14 @@ function islandora_fits_get_path_message($fits_path) {
   if (empty($errors)) {
     $image = [
       '#theme' => 'image',
-      '#uri' => '/core/misc/icons/73b355/check.svg',
+      '#uri' => Url::fromUri('base:core/misc/icons/73b355/check.svg')->toString(),
     ];
     $message = t('Executable found at @fitspath', ['@fitspath' => $fits_path]);
   }
   else {
     $image = [
       '#theme' => 'image',
-      '#uri' => '/core/misc/icons/e32700/error.svg',
+      '#uri' => Url::fromUri('base:core/misc/icons/e32700/error.svg')->toString(),
     ];
     $message = implode('<br/>', $errors);
   }
