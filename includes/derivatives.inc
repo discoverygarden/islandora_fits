@@ -152,6 +152,7 @@ function islandora_fits_verify_fits_xml($xml_file) {
  * @see hook_islandora_derivative()
  */
 function islandora_fits_add_datastream(AbstractObject $object, $datastream_id, $file_uri) {
+  $techmd_dsid = \Drupal::config('islandora_fits.settings')->get('islandora_fits_techmd_dsid');
   try {
     $ingest = !isset($object[$datastream_id]);
     $mime_detector = new MimeDetect();
@@ -173,9 +174,10 @@ function islandora_fits_add_datastream(AbstractObject $object, $datastream_id, $
       'success' => TRUE,
       'messages' => [
         [
-          'message' => t('Created TECHMD derivative for (@pid).'),
+          'message' => t('Created @techmd derivative for (@pid).'),
           'message_sub' => [
             '@pid' => $object->id,
+            '@techmd' => $techmd_dsid,
           ],
           'type' => 'dsm',
         ],
@@ -187,9 +189,10 @@ function islandora_fits_add_datastream(AbstractObject $object, $datastream_id, $
       'success' => FALSE,
       'messages' => [
         [
-          'message' => t('Failed to create TECHMD derivative for @pid.'),
+          'message' => t('Failed to create @techmd derivative for @pid.'),
           'message_sub' => [
             '@pid' => $object->id,
+            '@techmd' => $techmd_dsid,
           ],
           'type' => 'watchdog',
           'severity' => RfcLogLevel::ERROR,
