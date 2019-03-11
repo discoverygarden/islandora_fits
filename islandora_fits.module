@@ -6,6 +6,7 @@
  */
 
 use Drupal\Component\Utility\Html;
+use Drupal\Core\Cache\CacheableMetadata;
 
 /**
  * Implements hook_theme().
@@ -137,13 +138,21 @@ function template_preprocess_islandora_fits_metadata_display(array &$variables) 
  */
 function islandora_fits_metadata_display(AbstractObject $object) {
   module_load_include('inc', 'islandora', 'includes/breadcrumb');
-  return [
+
+  $cache_meta = (new CacheableMetadata())
+    ->addCacheableDependency($object);
+
+  $display = [
     '#theme' => 'islandora_fits_metadata_display',
     '#islandora_object' => $object,
     '#attached' => [
       'library' => ['islandora_fits/fits-css'],
     ],
   ];
+
+  $cache_meta->applyTo($display);
+
+  return $display;
 }
 
 /**
