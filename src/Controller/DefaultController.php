@@ -19,7 +19,9 @@ class DefaultController extends ControllerBase {
   public static function metadataAccess($object, AccountInterface $account) {
     $object = islandora_object_load($object);
     $perm = islandora_fits_metadata_access($object);
-    return $perm ? AccessResult::allowed() : AccessResult::forbidden();
+    return AccessResult::allowedIf($perm)
+      ->addCacheableDependency($object)
+      ->cachePerPermissions();
   }
 
   /**
