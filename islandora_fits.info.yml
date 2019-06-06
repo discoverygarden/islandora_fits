@@ -1,5 +1,5 @@
 name: 'Islandora FITS'
-description: 'View and manage FITS datastreams'
+description: 'View and manage FITS datastreams.'
 dependencies:
   - :islandora
 package: 'Islandora Tools'
