@@ -280,3 +280,46 @@ function islandora_fits_construct_output($node_name, $tool_name) {
 
   return ['name' => $node_name, 'tool' => ucwords($tool_name)];
 }
+
+/**
+ * Implements hook_help().
+ */
+function islandora_fits_help($route) {
+  switch ($route) {
+    // Main help page for the module.
+    case 'help.page.islandora_fits':
+      // About section.
+      $output = '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t(
+        'The Islandora FITS module works behind the scenes using the File
+        Information Tool Set (FITS) to create technical metadata datastreams
+        for objects ingested into Islandora.
+        See the <a href=":wiki">Islandora FITS wiki*</a>
+        for more information.', [
+          ':wiki' => 'https://wiki.duraspace.org/display/ISLANDORA/Islandora+FITS',
+        ]
+      ) .
+      '</p>';
+      // Uses section.
+      $output .= '<h3>' . t('Uses') . '</h3>';
+      $output .= '<dt>' . t('Acquiring Technical Metadata') . '</dt><dd>' . t(
+        'As a user, provided that this module has been configured correctly,
+        you do not need to do anything to make it gather technical metadata.
+        If you have access to the "Manage" tab for any given object that has
+        been ingested after the installation of this module, you can access the
+        "Datastreams" section of the "Manage" tab and view the TECHMD datastream
+        to see what this module produces.'
+      ) .
+      '</dd>';
+
+      $output .= '</br></br><p>' .
+        '*Links go to documentation for the Drupal 7 version of the module, as
+        documentation for the Drupal 8 version of the module has not yet been
+        written. There may be some small discrepencies; however, most key points
+        remain useful.' .
+      '</p>';
+      return $output;
+
+    // Other cases can be added for various admin pages.
+  }
+}
